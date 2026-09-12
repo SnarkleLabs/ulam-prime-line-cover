@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite this repository."
+type: software
+title: "Minimum Line Covers of Primes on the Ulam Spiral"
+authors:
+  - family-names: "Howell"
+    given-names: "Peter"
+date-released: 2026-09-12
+license: MIT
+abstract: >-
+  Programs, computational results, and visualizations for minimum straight-line
+  covers of prime-number locations on the Ulam spiral.
+keywords:
+  - Ulam spiral
+  - prime numbers
+  - line cover
+  - combinatorial optimization
