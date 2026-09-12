@@ -22,9 +22,9 @@ The principal difference here is geometric. Rather than considering the points
 (n, p_n), the primes are placed at their integer-coordinate positions on the
 Ulam spiral.
 
-This repository accompanies a video presentation of the project and is
-intended to make the computations, data, and methods available for inspection
-and reproduction.
+This repository accompanies a [video presentation](https://youtu.be/qJyon3THe4Y)
+of the project and is intended to make the computations, data, and methods available
+for inspection and reproduction. 
 
 An [animation of the computed covers](figures/ulam_growth.mp4) is included to
 show how the selected solutions evolve as additional primes are added.
@@ -111,9 +111,15 @@ This is substantially more computationally expensive than merely finding the
 minimum value L(N). An adaptive exhaustive-search program was developed to
 divide the search space into chunks that can be evaluated in parallel.
 
-Complete exhaustive counts have been obtained for every N through N = 30.
+Complete exhaustive counts have been obtained for every N through N = 31.
 Calculations beyond that range are exploratory and may require substantially
 more computation.
+
+The completed counts through N = 31 are provided in:
+
+    data/Number_of_Solutions.csv
+
+Its columns give N, the Nth prime, and the number of distinct optimal covers.
 
 An important convention is required when counting solutions. Geometrically,
 infinitely many lines pass through any single isolated point. For counting
@@ -201,7 +207,7 @@ many geometrically possible lines through a single isolated point do not
 produce infinitely many equivalent covers.
 
 This program has been used to complete exhaustive counts for every N through
-N = 30.
+N = 31.
 
 This program uses helper functions from `count_ulam_optimal_covers.py`; both
 files must remain together in the `src` directory. It also requires the
