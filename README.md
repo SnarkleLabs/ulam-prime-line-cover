@@ -77,6 +77,9 @@ N primes on the Ulam spiral.
 
 The repository contains results through N = 2508.
 
+The sequence \(L(N)\) has been submitted to [OEIS as A399941](https://oeis.org/A399941).
+The [computed terms for N = 1 through 2508](data/ulam_N_prime_L_2508.csv) are in the `L` column.
+
 
 ## Awkward primes
 
@@ -224,6 +227,31 @@ how the solutions evolve as additional primes are added.
 
 The visualization is not part of the optimization calculation itself.
 
+
+### How the progressive solver proves minimality
+
+Suppose the first `N-1` prime locations require exactly `k` lines.
+Adding the next prime cannot lower the minimum, and one extra line
+through that prime is always enough. Thus the new minimum is either
+`k` or `k+1`. If the previous cover already contains the new point,
+the solver can immediately report `k`. Otherwise, finding any
+`k`-line cover proves that `k` still suffices. Ruling out every
+`k`-line cover proves that the minimum is `k+1`.
+
+The solver uses branch-and-bound to rule out groups of candidate covers.
+For example, suppose a partial cover leaves `P` points uncovered and
+has `R` lines left in its `k`-line budget. If each eligible line
+covers at most `M` of those remaining points and `RM < P`, the
+branch cannot succeed. Even with no overlap, those lines would cover
+too few points. The counts in this example refer to the points still
+uncovered in the current branch. The implementation uses several
+bounds to prune its search.
+
+The search focuses on lines that cover at least three currently
+uncovered points. For any partial cover, the remaining points can
+always be covered in pairs, with one singleton if needed. When every
+available line covers at most two remaining points, that pairing also
+gives the minimum number of additional lines.
 
 ## Reproducing the calculations
 

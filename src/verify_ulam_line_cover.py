@@ -85,16 +85,6 @@ def exact_min_cover(points, verbose=False):
     heavy=build_line_masks(points)
     full=(1<<n)-1
 
-    # Incidence for branch choice.
-    inc=[[] for _ in range(n)]
-    for idx,(key,m) in enumerate(heavy):
-        mm=m
-        while mm:
-            lsb=mm & -mm
-            p=lsb.bit_length()-1
-            inc[p].append(idx)
-            mm -= lsb
-
     best=[(n+1)//2]
     best_sel=[[]]
 
@@ -145,41 +135,13 @@ def exact_min_cover(points, verbose=False):
             best[0]=len(chosen)+light_cost
             best_sel[0]=chosen[:]
 
-        # Pick an uncovered point with fewest productive heavy options.
-        upts=[]
-        mm=uncovered
-        while mm:
-            lsb=mm & -mm
-            p=lsb.bit_length()-1
-            opts=[]
-            for li in inc[p]:
-                c=popcount(heavy[li][1] & uncovered)
-                if c>=3:
-                    opts.append(( -c, li))
-            upts.append((len(opts), p, opts))
-            mm -= lsb
-        upts.sort(key=lambda t:(t[0],t[1]))
-        _, p, opts = upts[0]
-
-        # If no productive heavy line through p, we don't need to branch on a light line explicitly;
-        # baseline pairing handles it. Instead branch on any productive heavy line elsewhere.
-        if not opts:
-            best_global=[]
-            for li,(k,m) in enumerate(heavy):
-                c=popcount(m & uncovered)
-                if c>=3:
-                    best_global.append((-c,li))
-            opts=best_global
-            if not opts:
-                return
-
-        opts.sort()
-        for negc,li in opts:
-            m=heavy[li][1] & uncovered
-            c=-negc
-            if c<3:
-                continue
-            dfs(uncovered & ~m, chosen+[li])
+        # A cover may leave any particular point for a pair or singleton.
+        # Try every line that covers at least three remaining points.
+        # When no such line is needed, the pairing baseline finishes the cover.
+        for li, (_, mask) in enumerate(heavy):
+            hits = mask & uncovered
+            if popcount(hits) >= 3:
+                dfs(uncovered & ~hits, chosen + [li])
 
     dfs(full,[])
     return best[0], heavy, best_sel[0]
